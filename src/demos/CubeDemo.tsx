@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import ThreeScene from './ThreeScene';
 
 const CubeDemo = () => {
-  const [cubes, setCubes] = useState([{ id: 'cube1' }, { id: 'cube2' }, { id: 'cube3' }]);
+  const [cubes, setCubes] = useState([{ id: 'cube1', type: 'cube' }, { id: 'cube2', type: 'cube' }, { id: 'cube3', type: 'cube' }]);
 
   const addCube = () => {
-    const newCube = { id: `cube${cubes.length + 1}` };
+    const newCube = { id: `cube${cubes.length + 1}`, type: 'cube' };
     setCubes([...cubes, newCube]);
   };
 

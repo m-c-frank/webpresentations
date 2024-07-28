@@ -1,15 +1,17 @@
 import React, { useRef, useEffect } from 'react';
-import Scene from '../components/Scene';
+import Scene, { SceneObject } from '../components/Scene';
 import Cube from '../components/Cube';
+import Node from '../components/Node';
 
 interface CubeData {
     id: string;
+    type: string
 }
 
 const ThreeScene = ({ cubeData }: { cubeData: CubeData[] }) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const sceneRef = useRef<Scene | null>(null);
-    const cubeInstancesRef = useRef<Cube[]>([]);
+    const cubeInstancesRef = useRef<SceneObject[]>([]);
 
     useEffect(() => {
         if (containerRef.current) {
@@ -24,24 +26,28 @@ const ThreeScene = ({ cubeData }: { cubeData: CubeData[] }) => {
         };
     }, []);
 
-useEffect(() => {
-    const scene = sceneRef.current;
-    if (!scene) return;
 
-    const initialCubes = cubeData.map(({ id }) => {
-        const cube = new Cube(id);
-        scene.addObject(cube);
-        return cube;
-    });
+    useEffect(() => {
+        const scene = sceneRef.current;
+        if (!scene) return;
 
-    cubeInstancesRef.current = initialCubes;
-
-    return () => {
-        cubeInstancesRef.current.forEach(cube => {
-            scene.removeObject(cube);
+        const initialCubes: SceneObject[] = cubeData.map(({ id, type }) => {
+            const node = type === 'node' ? new Node(id) : new Cube(id);
+            scene.addObject(node);
+            return node;
         });
-    };
-    }, []);
+        console.log(initialCubes);
+
+        cubeInstancesRef.current = initialCubes;
+
+        return () => {
+            cubeInstancesRef.current.forEach(cube => {
+                scene.removeObject(cube);
+            });
+        };
+    }
+        , []);
+
 
     useEffect(() => {
         const scene = sceneRef.current;
