@@ -1,8 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ThreeScene from './ThreeScene';
+import { fetchNodes, NodeData } from '../data/fetchers';
 
 const NodeDemo = () => {
-  const [nodes, setNodes] = useState([{ id: 'node1', type: 'node' }, { id: 'node2', type: 'node' }, { id: 'node3', type: 'node' }]);
+  const [nodes, setNodes] = useState<NodeData[]>([{ id: 'node1', type: 'node', version: '1.0' }]);
+
+  useEffect(() => {
+    fetchNodes().then(
+      (nodes: NodeData[]) => {
+        console.log('nodes:', nodes);
+        // change type of all to "node"
+        nodes.forEach(node => node.type = "node");
+        setNodes(nodes);
+      }
+    );
+  }, []);
+
 
   return (
     <div className='flex w-full h-full flex-col'>

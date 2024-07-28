@@ -36,7 +36,6 @@ const ThreeScene = ({ cubeData }: { cubeData: CubeData[] }) => {
             scene.addObject(node);
             return node;
         });
-        console.log(initialCubes);
 
         cubeInstancesRef.current = initialCubes;
 
@@ -45,11 +44,11 @@ const ThreeScene = ({ cubeData }: { cubeData: CubeData[] }) => {
                 scene.removeObject(cube);
             });
         };
-    }
-        , []);
+    }, []);
 
 
     useEffect(() => {
+        console.log('cubeData:', cubeData);
         const scene = sceneRef.current;
 
         if (!scene) return;
@@ -60,14 +59,14 @@ const ThreeScene = ({ cubeData }: { cubeData: CubeData[] }) => {
             }
         });
 
-        const newCubeInstances = cubeData.map(({ id }) => {
+        const newCubeInstances: SceneObject[]= cubeData.map(({ id, type }) => {
             let cube = cubeInstancesRef.current.find(c => c.id === id);
             if (!cube) {
-                cube = new Cube(id);
-                scene.addObject(cube);
+                const node = type === 'node' ? new Node(id) : new Cube(id);
+                scene.addObject(node);
             }
             return cube;
-        });
+        }) as SceneObject[];
 
         cubeInstancesRef.current = newCubeInstances;
     }, [cubeData]);
