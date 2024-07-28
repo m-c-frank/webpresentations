@@ -66,7 +66,8 @@ useEffect(() => {
         cubeInstancesRef.current = newCubeInstances;
     }, [cubeData]);
 
-    return <div ref={containerRef} style={{ width: '600px', height: '500px' }} />;
+    // return <div ref={containerRef} style={{ width: '600px', height: '500px' }} />
+    return <div ref={containerRef} className='w-full h-full' />;
 
 };
 

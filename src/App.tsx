@@ -37,8 +37,9 @@ function App() {
         </div>
       </aside>
 
-      <div className={`flex-1 transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-16'}`}>
-        <CubeDemo/>
+      <div className={"flex-1 transition-all duration-300 ml-16"}>
+        <div id="overlay" className={`fixed top-0 left-0 z-30 w-full h-full bg-black duration-300 ${isSidebarOpen ? 'opacity-80' : 'opacity-0'} ${isSidebarOpen ? 'pointer-events-auto' : 'pointer-events-none'}`} />
+        <CubeDemo />
       </div>
     </main>
   );

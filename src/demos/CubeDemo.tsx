@@ -14,13 +14,22 @@ const CubeDemo = () => {
   };
 
   return (
-    <div>
-      <ThreeScene cubeData={cubes} />
-      <div>
-        <button onClick={addCube}>
+    <div className='flex w-full h-full flex-col'>
+      <div className='flex-1'>
+        <ThreeScene cubeData={cubes} />
+      </div>
+      <div className='flex justify-center p-4'>
+        {/* <button onClick={addCube}>
           Add Cube
         </button>
         <button onClick={removeCube}>
+          Remove Cube
+        </button> */}
+{/*  modern ui buttonsL        */}
+        <button onClick={addCube} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          Add Cube
+        </button>
+        <button onClick={removeCube} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
           Remove Cube
         </button>
       </div>
