@@ -3,13 +3,14 @@ import Scene, { SceneObject } from '../components/Scene';
 import Cube from '../components/Cube';
 import Node from '../components/Node';
 import Card from '../components/Card';
+import Note from '../components/Note';
 
-interface CubeData {
+interface SceneData {
     id: string;
     type: string
 }
 
-const ThreeScene = ({ cubeData }: { cubeData: CubeData[] }) => {
+const ThreeScene = ({ cubeData }: { cubeData: SceneData[] }) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const sceneRef = useRef<Scene | null>(null);
     const cubeInstancesRef = useRef<SceneObject[]>([]);
@@ -32,20 +33,23 @@ const ThreeScene = ({ cubeData }: { cubeData: CubeData[] }) => {
         const scene = sceneRef.current;
         if (!scene) return;
 
-        const initialCubes: SceneObject[] = cubeData.map(({ id, type }) => {
+        const initialCubes: SceneObject[] = cubeData.map((sceneObject) => {
             let node
-            switch (type) {
+            switch (sceneObject.type) {
                 case 'node':
-                    node = new Node(id);
+                    node = new Node(sceneObject);
                     break
                 case 'cube':
-                    node = new Cube(id);
+                    node = new Cube(sceneObject);
                     break
                 case "card":
-                    node = new Card(id);
+                    node = new Card(sceneObject);
+                    break
+                case "note":
+                    node = new Note(sceneObject);
                     break
                 default:
-                    node = new Cube(id);
+                    node = new Cube(sceneObject);
             }
             scene.addObject(node);
             return node;
@@ -73,22 +77,25 @@ const ThreeScene = ({ cubeData }: { cubeData: CubeData[] }) => {
             }
         });
 
-        const newCubeInstances: SceneObject[] = cubeData.map(({ id, type }) => {
-            let cube = cubeInstancesRef.current.find(c => c.id === id);
+        const newCubeInstances: SceneObject[] = cubeData.map((sceneObject) => {
+            let cube = cubeInstancesRef.current.find(c => c.id === sceneObject.id);
             if (!cube) {
                 let node
-                switch (type) {
+                switch (sceneObject.type) {
                     case 'node':
-                        node = new Node(id);
+                        node = new Node(sceneObject);
                         break
                     case 'cube':
-                        node = new Cube(id);
+                        node = new Cube(sceneObject);
                         break
                     case "card":
-                        node = new Card(id);
+                        node = new Card(sceneObject);
+                        break
+                    case "note":
+                        node = new Note(sceneObject);
                         break
                     default:
-                        node = new Cube(id);
+                        node = new Cube(sceneObject);
                 }
                 scene.addObject(node);
             }
@@ -103,4 +110,5 @@ const ThreeScene = ({ cubeData }: { cubeData: CubeData[] }) => {
 
 };
 
+export type { SceneData };
 export default ThreeScene;

@@ -1,13 +1,16 @@
 import * as THREE from 'three';
 import { SceneObject } from './Scene';
+import { SceneData } from '../demos/ThreeScene';
 
 class Node implements SceneObject {
     id: string;
+    data: SceneData;
     mesh: THREE.Mesh;
     selected: boolean = false;
 
-    constructor(id: string) {
-        this.id = id;
+    constructor(sceneData: SceneData) {
+        this.id = sceneData.id;
+        this.data = sceneData
         const geometry = new THREE.SphereGeometry(0.5, 32, 32);  // Adjust the radius and segments as needed
         const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
         this.mesh = new THREE.Mesh(geometry, material);

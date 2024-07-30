@@ -1,7 +1,9 @@
 import * as THREE from 'three';
+import { SceneData } from '../demos/ThreeScene';
 
 interface SceneObject {
     id: string;
+    data: SceneData;
     mesh: THREE.Mesh;
     addToScene(scene: THREE.Scene): void;
     removeFromScene(scene: THREE.Scene): void;

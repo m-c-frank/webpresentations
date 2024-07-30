@@ -1,17 +1,31 @@
 // server at env.HOST and env.PORT always has /nodes endpoint returning this interface:
 
-interface NodeData {
-    id: string;
+import { SceneData } from "../demos/ThreeScene";
+
+interface NodeData extends SceneData {
     version: string;
-    type: string;
 }
 
-const URL_NODES = "http://localhost:5051/nodes";
-console.log(URL_NODES);
+interface NoteData extends NodeData {
+    // pydantic:
+    // h0: str = "note"
+    // timestamp: Union[int, str] = Field(default_factory= lambda: str(int(1000* time.time())))
+    // type: str = "note"
+    // origin: str = "/notes"
+    // author: str = "mcfrank"
+    // content: str
+    h0: string;
+    timestamp: number;
+    origin: string;
+    author: string;
+    content: string;
+}
+
+const URL_SERVER = "http://localhost:5051";
 
 async function fetchNodes() {
     let nodes: NodeData[] = [];
-    await fetch(URL_NODES)
+    await fetch(URL_SERVER + "/nodes")
         .then(response => response.json())
         .then(data => {
             nodes = data["nodes"];
@@ -23,5 +37,19 @@ async function fetchNodes() {
     return nodes;
 }
 
-export type { NodeData };
-export { fetchNodes};
+async function fetchNotes() {
+    let notes: NoteData[] = [];
+    await fetch(URL_SERVER + "/notes")
+        .then(response => response.json())
+        .then(data => {
+            notes = data["nodes"];
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+    return notes;
+}
+
+export type { NodeData, NoteData };
+export { fetchNodes, fetchNotes };

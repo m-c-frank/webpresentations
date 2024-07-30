@@ -2,6 +2,7 @@ import { useState } from 'react';
 import CubeDemo from './demos/CubeDemo';
 import NodeDemo from './demos/NodeDemo';
 import CardDemo from './demos/CardDemo';
+import NoteDemo from './demos/NoteDemo';
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -23,6 +24,8 @@ function App() {
         return <NodeDemo />;
       case 'cards':
         return <CardDemo />;
+      case 'notes':
+        return <NoteDemo />;
       default:
         return <CubeDemo />;
     }
@@ -69,6 +72,16 @@ function App() {
                   </svg>
                 </div>
                 <span className={`ml-3 transition-all duration-300 ${isSidebarOpen ? 'opacity-100 transform translate-x-0' : 'opacity-0 transform -translate-x-10'}`}>Cards</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group" onClick={() => setActiveTab('notes')}>
+                <div className="w-6 h-6 flex items-center justify-center">
+                  <svg className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
+                    <path d="M11 0L0 5v11l11 6 11-6V5L11 0Zm0 2.182l8.364 4.727L11 11.364 2.636 6.909 11 2.182Zm0 16.636l-8-4.5V7.364l8 4.5 8-4.5v7.454l-8 4.5Z" />
+                  </svg>
+                </div>
+                <span className={`ml-3 transition-all duration-300 ${isSidebarOpen ? 'opacity-100 transform translate-x-0' : 'opacity-0 transform -translate-x-10'}`}>Notes</span>
               </a>
             </li>
           </ul>

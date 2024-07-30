@@ -1,8 +1,10 @@
 import * as THREE from 'three';
 import { SceneObject } from './Scene';
+import { SceneData } from '../demos/ThreeScene';
 
 class Card implements SceneObject {
     id: string;
+    data: SceneData;
     mesh: THREE.Mesh;
     selected: boolean = false;
     video: HTMLVideoElement;
@@ -10,8 +12,9 @@ class Card implements SceneObject {
     textTexture: THREE.Texture;
     textCanvas: HTMLCanvasElement;
 
-    constructor(id: string) {
-        this.id = id;
+    constructor(sceneData: SceneData) {
+        this.id = sceneData.id;
+        this.data = sceneData
 
         // Create a 3D box for the card
         const cardGroup = new THREE.Group();
