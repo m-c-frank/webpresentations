@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import CubeDemo from './demos/CubeDemo';
 import NodeDemo from './demos/NodeDemo';
+import CardDemo from './demos/CardDemo';
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -12,6 +13,19 @@ function App() {
 
   const handleMouseLeave = () => {
     setIsSidebarOpen(false);
+  };
+
+  const renderActiveTab = () => {
+    switch (activeTab) {
+      case 'cubes':
+        return <CubeDemo />;
+      case 'nodes':
+        return <NodeDemo />;
+      case 'cards':
+        return <CardDemo />;
+      default:
+        return <CubeDemo />;
+    }
   };
 
   return (
@@ -47,13 +61,23 @@ function App() {
                 <span className={`ml-3 transition-all duration-300 ${isSidebarOpen ? 'opacity-100 transform translate-x-0' : 'opacity-0 transform -translate-x-10'}`}>Nodes</span>
               </a>
             </li>
+            <li>
+              <a href="#" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group" onClick={() => setActiveTab('cards')}>
+                <div className="w-6 h-6 flex items-center justify-center">
+                  <svg className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
+                    <rect x="3" y="3" width="16" height="15" rx="2" />
+                  </svg>
+                </div>
+                <span className={`ml-3 transition-all duration-300 ${isSidebarOpen ? 'opacity-100 transform translate-x-0' : 'opacity-0 transform -translate-x-10'}`}>Cards</span>
+              </a>
+            </li>
           </ul>
         </div>
       </aside>
 
       <div className={"flex-1 transition-all duration-300 ml-16"}>
         <div id="overlay" className={`fixed top-0 left-0 z-30 w-full h-full bg-black duration-300 ${isSidebarOpen ? 'opacity-80' : 'opacity-0'} ${isSidebarOpen ? 'pointer-events-auto' : 'pointer-events-none'}`} />
-          { activeTab === 'cubes' ? <CubeDemo /> : <NodeDemo /> }
+        {renderActiveTab()}
       </div>
     </main>
   );

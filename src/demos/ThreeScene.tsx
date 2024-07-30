@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import Scene, { SceneObject } from '../components/Scene';
 import Cube from '../components/Cube';
 import Node from '../components/Node';
+import Card from '../components/Card';
 
 interface CubeData {
     id: string;
@@ -32,7 +33,20 @@ const ThreeScene = ({ cubeData }: { cubeData: CubeData[] }) => {
         if (!scene) return;
 
         const initialCubes: SceneObject[] = cubeData.map(({ id, type }) => {
-            const node = type === 'node' ? new Node(id) : new Cube(id);
+            let node
+            switch (type) {
+                case 'node':
+                    node = new Node(id);
+                    break
+                case 'cube':
+                    node = new Cube(id);
+                    break
+                case "card":
+                    node = new Card(id);
+                    break
+                default:
+                    node = new Cube(id);
+            }
             scene.addObject(node);
             return node;
         });
@@ -59,10 +73,23 @@ const ThreeScene = ({ cubeData }: { cubeData: CubeData[] }) => {
             }
         });
 
-        const newCubeInstances: SceneObject[]= cubeData.map(({ id, type }) => {
+        const newCubeInstances: SceneObject[] = cubeData.map(({ id, type }) => {
             let cube = cubeInstancesRef.current.find(c => c.id === id);
             if (!cube) {
-                const node = type === 'node' ? new Node(id) : new Cube(id);
+                let node
+                switch (type) {
+                    case 'node':
+                        node = new Node(id);
+                        break
+                    case 'cube':
+                        node = new Cube(id);
+                        break
+                    case "card":
+                        node = new Card(id);
+                        break
+                    default:
+                        node = new Cube(id);
+                }
                 scene.addObject(node);
             }
             return cube;
