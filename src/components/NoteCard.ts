@@ -1,14 +1,14 @@
 import * as THREE from 'three';
-import { SceneObject } from './Scene';
+import { SceneObject } from './scenes/Scene';
 import { SceneData } from '../demos/ThreeScene';
 import { NoteData } from '../data/fetchers';
 
 const cardWidth = 2.5;
 const cardHeight = 3.5;
-const cardThickness = 0.1;
+const cardThickness = 0.01;
 const aspectRatio = cardWidth / cardHeight;
 
-class Note implements SceneObject {
+class NoteCard implements SceneObject {
     id: string;
     data: NoteData;
     mesh: THREE.Mesh;
@@ -24,11 +24,11 @@ class Note implements SceneObject {
 
         // here i can insert a markdown to image data call to get the image data and then create a texture from it
         this.textCanvas = document.createElement('canvas');
-        this.textCanvas.width = 2048
+        this.textCanvas.width = 512
         this.textCanvas.height = Math.round(this.textCanvas.width / aspectRatio);
         const context = this.textCanvas.getContext('2d');
         if (context) {
-            context.fillStyle = '#FFFFFF';
+            context.fillStyle = '#ffffff';
             context.fillRect(0, 0, this.textCanvas.width, this.textCanvas.height);
             context.fillStyle = '#000000';
             context.font = '100% Arial';
@@ -40,13 +40,6 @@ class Note implements SceneObject {
         const textMaterial = new THREE.MeshBasicMaterial({ map: this.textTexture, side: THREE.FrontSide });
 
         const materials = [
-            // new THREE.MeshBasicMaterial({ color: 0xffffff }), // side 1
-            // new THREE.MeshBasicMaterial({ color: 0xffffff }), // side 2
-            // new THREE.MeshBasicMaterial({ color: 0xffffff }), // side 3
-            // new THREE.MeshBasicMaterial({ color: 0xffffff }), // side 4
-            // new THREE.MeshBasicMaterial({ color: 0xffffff }), // side 5 
-            // new THREE.MeshBasicMaterial({ color: 0xffffff })  // side 6
-            // now with the texture on the front side
             new THREE.MeshBasicMaterial({ color: 0xffffff }), // side 1
             new THREE.MeshBasicMaterial({ color: 0xffffff }), // side 2
             new THREE.MeshBasicMaterial({ color: 0xffffff }), // side 3
@@ -79,4 +72,4 @@ class Note implements SceneObject {
     }
 }
 
-export default Note;
+export default NoteCard;

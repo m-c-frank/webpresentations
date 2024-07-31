@@ -1,23 +1,42 @@
 import React, { useRef, useEffect } from 'react';
-import Scene, { SceneObject } from '../components/Scene';
+import Scene, { SceneObject } from '../components/scenes/Scene';
 import Cube from '../components/Cube';
 import Node from '../components/Node';
 import Card from '../components/Card';
-import Note from '../components/Note';
+import NoteCard from '../components/NoteCard';
 
 interface SceneData {
     id: string;
     type: string
 }
 
-const ThreeScene = ({ cubeData }: { cubeData: SceneData[] }) => {
+interface ThreeSceneProps {
+    cubeData: SceneData[];
+    onClickCallback?: (id: string) => void;
+}
+
+const sceneObjectFromData = (sceneData: SceneData): SceneObject => {
+    switch (sceneData.type) {
+        case "node":
+            return new Node(sceneData);
+        case "cube":
+            return new Cube(sceneData);
+        case "card":
+            return new Card(sceneData);
+        case "note":
+            return new NoteCard(sceneData);
+        default:
+            return new Cube(sceneData);
+    }
+}
+
+const ThreeScene = (threeSceneProps: ThreeSceneProps) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const sceneRef = useRef<Scene | null>(null);
     const cubeInstancesRef = useRef<SceneObject[]>([]);
-
     useEffect(() => {
         if (containerRef.current) {
-            sceneRef.current = new Scene(containerRef.current);
+            sceneRef.current = new Scene(containerRef.current, threeSceneProps.onClickCallback);
             sceneRef.current.render();
         }
 
@@ -33,24 +52,8 @@ const ThreeScene = ({ cubeData }: { cubeData: SceneData[] }) => {
         const scene = sceneRef.current;
         if (!scene) return;
 
-        const initialCubes: SceneObject[] = cubeData.map((sceneObject) => {
-            let node
-            switch (sceneObject.type) {
-                case 'node':
-                    node = new Node(sceneObject);
-                    break
-                case 'cube':
-                    node = new Cube(sceneObject);
-                    break
-                case "card":
-                    node = new Card(sceneObject);
-                    break
-                case "note":
-                    node = new Note(sceneObject);
-                    break
-                default:
-                    node = new Cube(sceneObject);
-            }
+        const initialCubes: SceneObject[] = threeSceneProps.cubeData.map((sceneObjectData: SceneData) => {
+            let node = sceneObjectFromData(sceneObjectData);
             scene.addObject(node);
             return node;
         });
@@ -66,44 +69,32 @@ const ThreeScene = ({ cubeData }: { cubeData: SceneData[] }) => {
 
 
     useEffect(() => {
-        console.log('cubeData:', cubeData);
         const scene = sceneRef.current;
 
         if (!scene) return;
 
         cubeInstancesRef.current.forEach(cube => {
-            if (!cubeData.some(data => data.id === cube.id)) {
+            if (!cube) return;
+            if (!threeSceneProps.cubeData.some((data: SceneData) => data.id === cube.id)) {
                 scene.removeObject(cube);
             }
         });
 
-        const newCubeInstances: SceneObject[] = cubeData.map((sceneObject) => {
-            let cube = cubeInstancesRef.current.find(c => c.id === sceneObject.id);
+        const newCubeInstances: SceneObject[] = threeSceneProps.cubeData.map((sceneObjectData: SceneData) => {
+            let cube = cubeInstancesRef.current.find(c => {
+                if (!c) return false;
+                return c.id === sceneObjectData.id
+            }
+            );
             if (!cube) {
-                let node
-                switch (sceneObject.type) {
-                    case 'node':
-                        node = new Node(sceneObject);
-                        break
-                    case 'cube':
-                        node = new Cube(sceneObject);
-                        break
-                    case "card":
-                        node = new Card(sceneObject);
-                        break
-                    case "note":
-                        node = new Note(sceneObject);
-                        break
-                    default:
-                        node = new Cube(sceneObject);
-                }
+                let node = sceneObjectFromData(sceneObjectData);
                 scene.addObject(node);
             }
             return cube;
         }) as SceneObject[];
 
         cubeInstancesRef.current = newCubeInstances;
-    }, [cubeData]);
+    }, [threeSceneProps?.cubeData]);
 
     // return <div ref={containerRef} style={{ width: '600px', height: '500px' }} />
     return <div ref={containerRef} className='w-full h-full' />;

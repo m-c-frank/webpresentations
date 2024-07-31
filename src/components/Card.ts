@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { SceneObject } from './Scene';
+import { SceneObject } from './scenes/Scene';
 import { SceneData } from '../demos/ThreeScene';
 
 class Card implements SceneObject {

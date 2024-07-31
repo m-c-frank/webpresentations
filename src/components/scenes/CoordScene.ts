@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { SceneData } from '../demos/ThreeScene';
+import { SceneData } from '../../demos/ThreeScene';
 
 interface SceneObject {
     id: string;
@@ -47,6 +47,7 @@ class Scene {
     }
 
     removeObject(object: SceneObject) {
+        if (!this.objects.includes(object)) return
         this.objects = this.objects.filter(obj => obj.id !== object.id);
         object.removeFromScene(this.scene);
     }

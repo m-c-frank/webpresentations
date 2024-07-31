@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { SceneObject } from './Scene';
+import { SceneObject } from './scenes/Scene';
 import { SceneData } from '../demos/ThreeScene';
 
 class Node implements SceneObject {
@@ -11,15 +11,12 @@ class Node implements SceneObject {
     constructor(sceneData: SceneData) {
         this.id = sceneData.id;
         this.data = sceneData
-        const geometry = new THREE.SphereGeometry(0.5, 32, 32);  // Adjust the radius and segments as needed
+        const geometry = new THREE.SphereGeometry(0.5, 32, 32);
         const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
         this.mesh = new THREE.Mesh(geometry, material);
     }
 
     render() {
-        this.mesh.rotation.x += 0.01;
-        this.mesh.rotation.y += 0.01;
-
         const color = new THREE.Color().setHSL((Math.sin(Date.now() * 0.001) + 1) / 2, 1, 0.5);
         if (this.selected) {
             color.setHex(0xffffff);
