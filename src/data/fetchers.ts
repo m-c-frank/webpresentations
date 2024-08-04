@@ -51,5 +51,29 @@ async function fetchNotes() {
     return notes;
 }
 
-export type { NodeData, NoteData };
-export { fetchNodes, fetchNotes };
+interface Link {
+    source: string;
+    target: string;
+}
+
+interface Graph {
+    nodes: NoteData[];
+    links: Link[]
+}
+
+async function fetchNoteForceGraph() {
+    let graph: Graph = { nodes: [], links: [] };
+    await fetch(URL_SERVER + "/graph/notes/force")
+        .then(response => response.json())
+        .then(data => {
+            graph = data;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+    return graph;
+}
+
+export type { NodeData, NoteData, Link, Graph };
+export { fetchNodes, fetchNotes, fetchNoteForceGraph };
