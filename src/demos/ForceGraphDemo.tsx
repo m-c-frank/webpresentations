@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import ForceGraph3D from '3d-force-graph';
 import * as d3 from 'd3';
+import * as THREE from 'three';
 import { Link, NoteData, fetchNoteForceGraph } from '../data/fetchers';
 
 const ForceGraphDemo: React.FC = () => {
@@ -22,35 +23,44 @@ const ForceGraphDemo: React.FC = () => {
     if (graphRef.current && notes.length && links.length) {
       const myGraph = ForceGraph3D()(graphRef.current);
 
-      // Customize the force simulation
-      const customForceLink = d3.forceLink(links)
+      // Set up the simulation
+      const simulationNodes = notes.map(note => ({
+        id: note.id,
+        x: Math.random() * 2 - 1,
+        y: Math.random() * 2 - 1,
+        z: 0  // Fixing z position for simplicity
+      }));
+
+      const simulationLinks = links.map(link => ({
+        source: link.source_id,
+        target: link.target_id,
+        similarity: 0
+      }));
+
+      const customForceLink = d3.forceLink(simulationLinks)
         .id((d: any) => d.id)
-        .strength((link: any) => (link.similarity + 1) / 2);
+        .strength(link => (link.similarity + 1) / 2);
 
-
-        const simulationNodes = notes.map((note) => {
-            return {
-                id: note.id,
-                x: 0,
-                y: 0,
-                z: 0,
-            }
-        }
-        );
       const customForceSimulation = d3.forceSimulation(simulationNodes)
         .force('link', customForceLink)
-        .force('charge', d3.forceManyBody())
-        .force('center', d3.forceCenter(window.innerWidth / 2, window.innerHeight / 2));
+        .force('charge', d3.forceManyBody().strength(-50))
+        .force('center', d3.forceCenter(0, 0))
+        .force('collision', d3.forceCollide().radius(10))
+        .on('tick', () => {
+          myGraph.graphData({ nodes: simulationNodes, links: simulationLinks });
+        });
 
       myGraph
-        .d3Force('link', customForceLink)
-        .d3Force('charge', d3.forceManyBody())
-        .d3Force('center', d3.forceCenter(window.innerWidth / 2, window.innerHeight / 2));
+        .nodeAutoColorBy('id')
+        .linkDirectionalParticles(2)
+        .linkMaterial(() => new THREE.LineBasicMaterial({ color: 0x00ff00 }));
 
-      myGraph.graphData({ nodes: notes, links: links });
+      // Set initial positions
+      myGraph.graphData({ nodes: simulationNodes, links: simulationLinks });
 
       // Clean up the ForceGraph3D instance on component unmount
       return () => {
+        customForceSimulation.stop();
         myGraph._destructor();
       };
     }

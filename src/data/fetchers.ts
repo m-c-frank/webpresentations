@@ -2,6 +2,11 @@
 
 import { SceneData } from "../demos/ThreeScene";
 
+const HOST_BROKER = process.env.REACT_APP_HOST_BROKER;
+const PORT_BROKER = process.env.REACT_APP_PORT_BROKER;
+
+const URL_SERVER = `http://${HOST_BROKER}:${PORT_BROKER}`;
+
 interface NodeData extends SceneData {
     version: string;
 }
@@ -20,8 +25,6 @@ interface NoteData extends NodeData {
     author: string;
     content: string;
 }
-
-const URL_SERVER = "http://localhost:5051";
 
 async function fetchNodes() {
     let nodes: NodeData[] = [];
@@ -52,8 +55,8 @@ async function fetchNotes() {
 }
 
 interface Link {
-    source: string;
-    target: string;
+    source_id: string;
+    target_id: string;
 }
 
 interface Graph {
