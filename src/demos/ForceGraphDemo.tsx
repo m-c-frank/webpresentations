@@ -24,18 +24,25 @@ const ForceGraphDemo: React.FC = () => {
       const myGraph = ForceGraph3D()(graphRef.current);
 
       // Set up the simulation
-      const simulationNodes = notes.map(note => ({
-        id: note.id,
-        x: Math.random() * 2 - 1,
-        y: Math.random() * 2 - 1,
-        z: 0  // Fixing z position for simplicity
-      }));
+      const simulationNodes = notes.map(
+        note => {
+          return {
+            id: note.node_id,
+            x: Math.random() * 2 - 1,
+            y: Math.random() * 2 - 1,
+            z: 0  // Fixing z position for simplicity
+          }
+        }
+      )
 
       const simulationLinks = links.map(link => ({
         source: link.source_id,
         target: link.target_id,
         similarity: 0
       }));
+
+      console.log(simulationNodes)
+      console.log(simulationLinks)
 
       const customForceLink = d3.forceLink(simulationLinks)
         .id((d: any) => d.id)

@@ -19,6 +19,7 @@ interface NoteData extends NodeData {
     // origin: str = "/notes"
     // author: str = "mcfrank"
     // content: str
+    node_id: string;
     h0: string;
     timestamp: number;
     origin: string;

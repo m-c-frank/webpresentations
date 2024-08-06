@@ -4,7 +4,7 @@ import ThreeScene from './ThreeScene';
 
 
 const NoteDemo = () => {
-  const [notes, setNotes] = useState<NoteData[]>([{ id: 'node1', type: 'note', version: '0.0.0', h0: 'note', timestamp: 0, origin: '/notes', author: 'mcfrank', content: 'This is a note' }]);
+  const [notes, setNotes] = useState<NoteData[]>([{ node_id: "asdf", id: 'node1', type: 'note', version: '0.0.0', h0: 'note', timestamp: 0, origin: '/notes', author: 'mcfrank', content: 'This is a note' }]);
 
   useEffect(() => {
     fetchNotes().then(
