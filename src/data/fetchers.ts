@@ -51,14 +51,33 @@ async function fetchNotes() {
     return notes;
 }
 
+interface Node {
+    id: string;
+}
+
 interface Link {
     source: string;
     target: string;
+    similarity: number;
 }
 
 interface Graph {
-    nodes: NoteData[];
+    nodes: Node[];
     links: Link[]
+}
+
+async function fetchNodeForceGraph() {
+    let graph: Graph = { nodes: [], links: [] };
+    await fetch(URL_SERVER + "/graph/nodes/force")
+        .then(response => response.json())
+        .then(data => {
+            graph = data;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+    return graph;
 }
 
 async function fetchNoteForceGraph() {
@@ -75,5 +94,5 @@ async function fetchNoteForceGraph() {
     return graph;
 }
 
-export type { NodeData, NoteData, Link, Graph };
-export { fetchNodes, fetchNotes, fetchNoteForceGraph };
+export type { NodeData, NoteData, Link, Graph, Node };
+export { fetchNodes, fetchNotes, fetchNoteForceGraph, fetchNodeForceGraph };

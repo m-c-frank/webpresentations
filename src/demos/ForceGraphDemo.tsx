@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
 import ForceGraph3D from '3d-force-graph';
 import * as d3 from 'd3';
-import { Link, NoteData, fetchNoteForceGraph } from '../data/fetchers';
+import { Link, Node, NoteData, fetchNoteForceGraph } from '../data/fetchers';
 
 const ForceGraphDemo: React.FC = () => {
-  const [notes, setNotes] = useState<NoteData[]>([]);
+  const [notes, setNotes] = useState<Node[]>([]);
   const [links, setLinks] = useState<Link[]>([]);
   const graphRef = useRef<HTMLDivElement>(null);
 
@@ -37,10 +37,6 @@ const ForceGraphDemo: React.FC = () => {
             }
         }
         );
-      const customForceSimulation = d3.forceSimulation(simulationNodes)
-        .force('link', customForceLink)
-        .force('charge', d3.forceManyBody())
-        .force('center', d3.forceCenter(window.innerWidth / 2, window.innerHeight / 2));
 
       myGraph
         .d3Force('link', customForceLink)
